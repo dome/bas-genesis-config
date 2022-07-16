@@ -95,7 +95,7 @@ contract ChainConfig is InjectorContextHolder, IChainConfig {
         emit WhtWalletAddressChanged(0x0000000000000000000000000000000000000000, 0xAC5675D47B1Cd43C836dF6014D86B70B06173542);
         _consensusParams.minTotalDelegatedAmount = 1000000000000000000000000;
         _consensusParams.splitPercent = SplitPercent(3300, 670, 6030); // 33%, 6.7%, 60.3%
-        _consensusParams.taxPercent = TaxPercent(700, 300, 1500); // 7%, 3%, 15%
+        _consensusParams.taxPercent = TaxPercent(654, 300, 1500); // 7%, 3%, 15%
     }
 
     function getActiveValidatorsLength() external view override returns (uint32) {
