@@ -93,8 +93,8 @@ contract ChainConfig is InjectorContextHolder, IChainConfig {
         emit VatWalletAddressChanged(0x0000000000000000000000000000000000000000, 0xC3317062E170f5794825dC5D93D6b045f06Bf3a5);
         _consensusParams.whtWalletAddress = 0xAC5675D47B1Cd43C836dF6014D86B70B06173542; // hw3
         emit WhtWalletAddressChanged(0x0000000000000000000000000000000000000000, 0xAC5675D47B1Cd43C836dF6014D86B70B06173542);
-        _consensusParams.minTotalDelegatedAmount = 100000;
-        emit MinTotalDelegatedAmountChanged(0, 100000);
+        _consensusParams.minTotalDelegatedAmount = 10000000000000;
+        emit MinTotalDelegatedAmountChanged(0, 10000000000000);
         _consensusParams.splitPercent = SplitPercent(3300, 670, 6030); // 33%, 6.7%, 60.3%
         _consensusParams.taxPercent = TaxPercent(654, 300, 1500); // 7%, 3%, 15%
     }
