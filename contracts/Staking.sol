@@ -355,10 +355,10 @@ contract Staking is InjectorContextHolder, IStaking {
         
         if (validator.status == ValidatorStatus.Active && 
             validatorSnapshot.totalDelegated < _CHAIN_CONFIG_CONTRACT.getMinTotalDelegatedAmount()) {
-            disableValidator(validator.validatorAddress);
+            _disableValidator(validator.validatorAddress);
         } else if (validator.status == ValidatorStatus.Pending && 
             validatorSnapshot.totalDelegated >= _CHAIN_CONFIG_CONTRACT.getMinTotalDelegatedAmount()) {
-            activateValidator(validator.validatorAddress);
+            _activateValidator(validator.validatorAddress);
         }
         
         // if last pending delegate has the same next epoch then its safe to just increase total
@@ -400,10 +400,10 @@ contract Staking is InjectorContextHolder, IStaking {
 
         if (validator.status == ValidatorStatus.Active && 
             validatorSnapshot.totalDelegated < _CHAIN_CONFIG_CONTRACT.getMinTotalDelegatedAmount()) {
-            disableValidator(validator.validatorAddress);
+            _disableValidator(validator.validatorAddress);
         } else if (validator.status == ValidatorStatus.Pending && 
             validatorSnapshot.totalDelegated >= _CHAIN_CONFIG_CONTRACT.getMinTotalDelegatedAmount()) {
-            activateValidator(validator.validatorAddress);
+            _activateValidator(validator.validatorAddress);
         }
 
 
@@ -655,7 +655,7 @@ contract Staking is InjectorContextHolder, IStaking {
         }
     }
 
-    function activateValidator(address validatorAddress) public onlyFromGovernance virtual override {
+    function _activateValidator(address validatorAddress) internal {
         Validator memory validator = _validatorsMap[validatorAddress];
         require(_validatorsMap[validatorAddress].status == ValidatorStatus.Pending, "bs");
         _activeValidatorsList.push(validatorAddress);
@@ -665,7 +665,7 @@ contract Staking is InjectorContextHolder, IStaking {
         emit ValidatorModified(validatorAddress, validator.ownerAddress, uint8(validator.status), 0);
     }
 
-    function disableValidator(address validatorAddress) public onlyFromGovernance virtual override {
+    function _disableValidator(address validatorAddress) internal {
         Validator memory validator = _validatorsMap[validatorAddress];
         require(validator.status == ValidatorStatus.Active || validator.status == ValidatorStatus.Jail, "bs");
         _removeValidatorFromActiveList(validatorAddress);
@@ -674,6 +674,15 @@ contract Staking is InjectorContextHolder, IStaking {
         // ValidatorSnapshot storage snapshot = _touchValidatorSnapshot(validator, nextEpoch());
         emit ValidatorModified(validatorAddress, validator.ownerAddress, uint8(validator.status), 0);
     }
+
+    function activateValidator(address validatorAddress) public onlyFromGovernance  virtual override {
+         _activateValidator(validatorAddress);
+    }
+
+    function disableValidator(address validatorAddress) public onlyFromGovernance  virtual override {
+         _disableValidator(validatorAddress);
+    }
+
 
     function isValidatorActive(address account) external override view returns (bool) {
         if (_validatorsMap[account].status != ValidatorStatus.Active) {
